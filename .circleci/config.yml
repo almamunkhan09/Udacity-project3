@@ -61,21 +61,33 @@ jobs:
       #    template: success_tagged_deploy_1
       
 ######################################################################
-#   build-backend:
-#     docker:
-#       - image: circleci/node:13.8.0
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys: [backend-build]
-#       - run:
-#           name: Back-end build
-#           command: |
-#              # Your code here
-#              exit 1
-#       - save_cache:
-#           paths: [backend/node_modules]
-#           key: backend-build
+
+  build-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: Back-end build
+          command: |
+             cd backend
+             npm install
+             npm run build
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build  
+
+## Adding Slack Notifications. Currently fail notification is on
+
+      # - slack/notify:
+      #    event: fail
+      #    template: basic_fail_1
+      
+      # - slack/notify:
+      #    event: pass
+      #    template: success_tagged_deploy_1
+  
+##################################################################
 
 #   test-frontend:
 #     docker:
@@ -279,7 +291,7 @@ workflows:
   default:
     jobs:
       - build-frontend
-      # - build-backend
+      - build-backend
       # - test-frontend:
       #     requires: [build-frontend]
       # - test-backend:
