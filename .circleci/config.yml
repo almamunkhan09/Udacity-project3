@@ -197,7 +197,7 @@ jobs:
          event: fail
          template: basic_fail_1
 
-## Part and configure Infrastructure
+## configure Infrastructure
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli:2.7.18
