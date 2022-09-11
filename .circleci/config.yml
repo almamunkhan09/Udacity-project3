@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.4.4
+
 # commands:
 #   destroy-environment:
 #     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -52,9 +55,9 @@ jobs:
 
 ## Adding Slack Notifications. Currently fail notification is on
 
-      # - slack/notify:
-      #    event: fail
-      #    template: basic_fail_1
+      - slack/notify:
+         event: fail
+         template: basic_fail_1
       
       # - slack/notify:
       #    event: pass
@@ -79,9 +82,9 @@ jobs:
 
 ## Adding Slack Notifications. Currently fail notification is on
 
-      # - slack/notify:
-      #    event: fail
-      #    template: basic_fail_1
+      - slack/notify:
+         event: fail
+         template: basic_fail_1
       
       # - slack/notify:
       #    event: pass
@@ -106,9 +109,9 @@ jobs:
             npm run test
 ## Slack notification for test 
 
-      # - slack/notify:
-      #    event: fail
-      #    template: basic_fail_1
+      - slack/notify:
+         event: fail
+         template: basic_fail_1
   
 ## Test backend
   test-backend:
@@ -129,9 +132,9 @@ jobs:
       
 ## Slack notification for test 
 
-      # - slack/notify:
-      #    event: fail
-      #    template: basic_fail_1
+      - slack/notify:
+         event: fail
+         template: basic_fail_1
   
 
       # Restore from cache
@@ -154,9 +157,14 @@ jobs:
           command: |
             cd frontend
             npm install
-            npm audit fix --audit-level=critical --force
-            npm audit fix --audit-level=critical --force
+            
             npm audit --audit-level=critical
+
+      ## Slack notification for test 
+
+      - slack/notify:
+         event: fail
+         template: basic_fail_1
   
 ## Audit the backend
 
@@ -172,9 +180,12 @@ jobs:
           command: |
             cd backend
             npm install
-            npm audit fix --audit-level=critical --force
-            npm audit fix --audit-level=critical --force
+            
             npm audit --audit-level=critical
+
+      - slack/notify:
+         event: fail
+         template: basic_fail_1
 
 #   deploy-infrastructure:
 #     docker:
