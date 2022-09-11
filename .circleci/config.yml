@@ -239,24 +239,47 @@ jobs:
       - destroy-environment  # Here's where you will add some code to rollback on failure
 
 
-#   configure-infrastructure:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # Your code here
-#             exit 1
-#       - run:
-#           name: Configure server
-#           command: |
-#             # Your code here
-#             exit 1
-#       # Here's where you will add some code to rollback on failure      
+
+  configure-infrastructure:
+    docker:
+      - image: python:3.7.13-alpine3.16
+    steps:
+      
+      - checkout 
+      
+      - add_ssh_keys:
+          fingerprints: ["63:8f:b6:00:7a:97:3a:7d:d8:fb:3c:74:db:c8:02:1e"] # You can get this ID in the section where you registered the SSH K
+      - run:
+          name: Install tar utility
+          command: |
+            apk add tar gzip
+      
+      - attach_workspace:
+            at: workspace # path
+
+      - run:
+          name: Install dependencies
+          command: |
+             apk add openssh-client
+             apk add ansible
+#Installation of aws cli inorder to destroy infrustruture if fail
+
+      - run: 
+          name: install awscli 
+          command: |
+            apk update && apk add --no-cache curl gcompat zip 
+            curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.30.zip -o awscliv2.zip 
+            unzip awscliv2.zip && ./aws/install
+      - run:
+          name: Configure server
+          command: |
+            cat workspace/inventory.txt >> .circleci/ansible/inventory.txt
+            cd .circleci/ansible
+            export ANSIBLE_HOST_KEY_CHECKING=False
+            ansible-playbook -i inventory.txt configure-server.yml -u ubuntu -c ssh
+         
+
+      - destroy-environment       # Here's where you will add some code to rollback on failure 
 
 #   run-migrations:
 #     docker:
