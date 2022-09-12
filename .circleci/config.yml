@@ -36,7 +36,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS = $(curl https://kvdb.io/WbbmMSRoodDrXnX4ssiYTK/<< parameters.migration_id >> )
+            SUCCESS = $(curl https://Cg7KfwNcoZm1BeguvqiGKs/<< parameters.migration_id >> )
             if(( $SUCCESS==1 )); 
             then
              cd ~/project/backend
