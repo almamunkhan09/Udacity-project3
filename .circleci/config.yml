@@ -30,13 +30,13 @@ commands:
     parameters:
       migration_id:
         type: string
-        default: "migration_${CIRCLE_WORKFLOW_ID:0:7}"
+        default: "migration_${CIRCLE_WORKFLOW_ID:0:7}" 
     steps:
       - run:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS = $(curl https://Cg7KfwNcoZm1BeguvqiGKs/<< parameters.migration_id >> )
+            SUCCESS = $(curl https://kvdb.io/Cg7KfwNcoZm1BeguvqiGKs/<< parameters.migration_id >> )
             if(( $SUCCESS==1 )); 
             then
              cd ~/project/backend
