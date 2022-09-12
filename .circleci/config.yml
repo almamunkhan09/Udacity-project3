@@ -248,7 +248,7 @@ jobs:
       - checkout 
       
       - add_ssh_keys:
-          fingerprints: ["63:8f:b6:00:7a:97:3a:7d:d8:fb:3c:74:db:c8:02:1e"] # You can get this ID in the section where you registered the SSH K
+          fingerprints: ["8c:07:8e:49:57:54:f3:d4:94:23:74:ed:97:5a:d0:38"] # You can get this ID in the section where you registered the SSH K
       - run:
           name: Install tar utility
           command: |
