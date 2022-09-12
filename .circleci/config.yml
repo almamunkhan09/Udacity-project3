@@ -471,7 +471,7 @@ jobs:
             echo "${URL}"
             if curl -s "${URL}" | grep "Welcome"
             then
-              return 1
+              return 0
             else
               return 1
             fi
@@ -480,20 +480,41 @@ jobs:
       - destroy-environment 
       - revert-migrations      # Here's where you will add some code to rollback on failure      
 
-#   cloudfront-update:
-#     docker:
-#       # Docker image here that supports AWS CLI
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Update cloudfront distribution
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  cloudfront-update:
+    docker:
+      - image: alpine:3.15.5
+    steps:
+      
+      - checkout
+          
+      - attach_workspace:
+            at: workspace # path
+
+      - run:
+          name: Install dependencies ansible,openssh,nodejs
+          command: |
+             apk add --update nodejs npm
+             node --version
+             npm --version 
+      - run: 
+          name: install awscli and curl 
+          command: |
+            apk update && apk add --no-cache curl gcompat zip &&  \
+            curl -s https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.30.zip -o awscliv2.zip && \
+            unzip awscliv2.zip && ./aws/install
+            aws --version
+      
+      - run:
+          name: cloudfront-update
+          command: | 
+            aws cloudformation deploy \
+            --template-file .circleci/files/cloudfront.yml \
+            --stack-name InitialStack \
+            --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --tags project=udapeople
+
+      - destroy-environment 
+      - revert-migrations  
 
 # cleanup:
 #     docker:
@@ -543,7 +564,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
+      - cloudfront-update:
+          requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]
