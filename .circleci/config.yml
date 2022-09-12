@@ -274,7 +274,7 @@ jobs:
       - run:
           name: Configure server
           command: |
-            cat workspace/inventory.txt >> .circleci/ansible/inventory.txt
+            tail -1 workspace/inventory.txt >> .circleci/ansible/inventory.txt
             cd .circleci/ansible
             export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i inventory.txt configure-server.yml -u ubuntu -c ssh
@@ -400,7 +400,7 @@ jobs:
       - run:
           name: deploy backend
           command: |
-            cat workspace/inventory.txt >> .circleci/ansible/inventory.txt
+            tail -1 workspace/inventory.txt >> .circleci/ansible/inventory.txt
             cd backend
             
             echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> .env
@@ -455,7 +455,7 @@ jobs:
       - run:
           name: backend smoke-test
           command: | 
-            export API_URL="http://$(cat workspace/inventory.txt):3030"
+            export API_URL="http://$(tail -1 workspace/inventory.txt):3030"
             echo "${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
             then
