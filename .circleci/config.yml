@@ -558,7 +558,7 @@ jobs:
 
       - destroy-environment 
       - revert-migrations  
-aws cloudformation list-exports --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text
+
             
 
 workflows:
