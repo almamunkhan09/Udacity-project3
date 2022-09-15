@@ -27,6 +27,9 @@ Resources:
         Enabled: True
         DefaultRootObject: index.html
         DefaultCacheBehavior:
+          DefaultTTL: 200
+          MaxTTL: 300
+          MinTTL: 150
           ForwardedValues:
             QueryString: False
           TargetOriginId: webpage
@@ -38,3 +41,5 @@ Outputs:
     Description: URL for website hosted on S3
     Export:
       Name: WorkflowID
+
+# aws cloudformation deploy --template-file cloudfront.yml --stack-name InitialStack --parameter-overrides WorkflowID=udapeople-amkpro3
