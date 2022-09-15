@@ -232,11 +232,11 @@ jobs:
              aws ec2 describe-instances \
              --filters "Name=tag-value,Values=udapeople" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text > workspace/inventory.txt
              cat workspace/inventory.txt 
-            #  aws cloudformation \
-            #  list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-            #  --no-paginate --output text > \
-            #  workspace/oldworkflowid.txt
-            #  cat workspace/oldworkflowid.txt
+             aws cloudformation \
+             list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+             --no-paginate --output text > \
+             workspace/oldworkflowid.txt
+             cat workspace/oldworkflowid.txt
              
       - persist_to_workspace:
           root: workspace
@@ -633,8 +633,8 @@ workflows:
           filters:
             branches:
               only: [main]
-      # - cleanup:
-      #     requires: [cloudfront-update]
-      #     filters:
-      #       branches:
-      #         only: [main]
+      - cleanup:
+          requires: [cloudfront-update]
+          filters:
+            branches:
+              only: [main]
