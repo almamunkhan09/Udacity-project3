@@ -615,16 +615,11 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-<<<<<<< HEAD
-      - cleanup:
-          requires: [cloudfront-update] 
-=======
           filters:
             branches:
               only: [main]
-      # - cleanup:
-      #     requires: [cloudfront-update]
-      #     filters:
-      #       branches:
-      #         only: [main]
->>>>>>> dda457b5190812e619b43707ccbe43eb8f179561
+      - cleanup:
+          requires: [cloudfront-update]
+          filters:
+            branches:
+              only: [main]
