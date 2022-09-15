@@ -233,16 +233,16 @@ jobs:
              --filters "Name=tag-value,Values=udapeople" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text > workspace/inventory.txt
              cat workspace/inventory.txt 
              aws cloudformation \
-             list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-             --no-paginate --output text > \
-             workspace/oldworkflowid.txt
-             cat workspace/oldworkflowid.txt
+            #  list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+            #  --no-paginate --output text > \
+            #  workspace/oldworkflowid.txt
+            #  cat workspace/oldworkflowid.txt
              
       - persist_to_workspace:
           root: workspace
           paths:
             - inventory.txt
-            - oldworkflowid.txt
+            # - oldworkflowid.txt
       
       - destroy-environment  # Here's where you will add some code to rollback on failure
 
@@ -456,7 +456,7 @@ jobs:
             unzip awscliv2.zip && ./aws/install
             aws --version
       - run: 
-          name: sleep 5 min 
+          name: sleep 2 min 
           command: |
             sleep 2m
       - run:
@@ -633,8 +633,8 @@ workflows:
           filters:
             branches:
               only: [main]
-      - cleanup:
-          requires: [cloudfront-update]
-          filters:
-            branches:
-              only: [main]
+      # - cleanup:
+      #     requires: [cloudfront-update]
+      #     filters:
+      #       branches:
+      #         only: [main]
