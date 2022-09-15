@@ -242,7 +242,7 @@ jobs:
           root: workspace
           paths:
             - inventory.txt
-            - oldworkflowid.txt
+            # - oldworkflowid.txt
       
       - destroy-environment  # Here's where you will add some code to rollback on failure
 
@@ -456,7 +456,7 @@ jobs:
             unzip awscliv2.zip && ./aws/install
             aws --version
       - run: 
-          name: sleep 5 min 
+          name: sleep 2 min 
           command: |
             sleep 2m
       - run:
@@ -544,7 +544,7 @@ jobs:
           name: Get the old workflow ids
           command: | 
 
-            export OldWorkflowID=$(cut -d "-" -f 2 workspace/oldworkflowid.txt)
+            export OldWorkflowID=$(cat workspace/oldworkflowid.txt)
             echo OldWorkflowID: "${OldWorkflowID}"
             echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
                    
@@ -615,5 +615,16 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
+<<<<<<< HEAD
       - cleanup:
           requires: [cloudfront-update] 
+=======
+          filters:
+            branches:
+              only: [main]
+      # - cleanup:
+      #     requires: [cloudfront-update]
+      #     filters:
+      #       branches:
+      #         only: [main]
+>>>>>>> dda457b5190812e619b43707ccbe43eb8f179561
