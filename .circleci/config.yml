@@ -544,7 +544,7 @@ jobs:
           name: Get the old workflow ids
           command: | 
 
-            export OldWorkflowID=$(cut -d "-" -f 2 workspace/oldworkflowid.txt)
+            export OldWorkflowID=$(cat workspace/oldworkflowid.txt)
             echo OldWorkflowID: "${OldWorkflowID}"
             echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
                    
@@ -633,8 +633,8 @@ workflows:
           filters:
             branches:
               only: [main]
-      - cleanup:
-          requires: [cloudfront-update]
-          filters:
-            branches:
-              only: [main]
+      # - cleanup:
+      #     requires: [cloudfront-update]
+      #     filters:
+      #       branches:
+      #         only: [main]
